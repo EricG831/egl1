@@ -1,0 +1,95 @@
+<!--make the first 4 random and after the search is generated another 4-->
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title> Sign Up Page </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+
+    <body onload="preBuilt()">
+        <h1> Pixabay Image Search </h1>
+        <form id="signupForm" method="get" onsubmit="buildGallery(); return false;">
+        
+            Keyword: <input type="text" class="form-control" id="Descimages" placeholder=""><br> 
+            
+            Orientation: <select id="orientation">
+                <option value="vertical">Vertical</option>
+                <option value="horizontal">Horizontal</option>
+            </select><input type="submit" value="Search">
+        </form>
+        
+        <div class="flex-container" id="images">
+        </div>
+        
+        
+        <script>
+        let preBuilt = function() {
+            var cars = ["Ferrari", "Mustang", "BMW", "Porsche", "Lexus", "GTR", "Hellcat", "Supra"];
+            $("#images").empty();
+            var API_KEY = '15519113-977e796c231895205c0fcd218';
+            for(let i = 0; i < 4; i++){
+                let random = Math.floor(Math.random() * 7) + 0;
+                var URL = "https://pixabay.com/api/?key=15519113-977e796c231895205c0fcd218&q=" + cars[random] + "&image_type=photo";
+                cars.splice(random, 1);
+                let j=0;
+                $.getJSON(URL, function(data) {
+                    if (parseInt(data.totalHits) > 0)
+                        $.each(data.hits, function(i, hit) {
+                            if(j == 0){
+                                $("#images").append("Likes: " + hit.likes);
+                                $("#images").append("<div class=\"img-thumbnail flex-item\"><img src=\"" + hit.largeImageURL + "\"></div>");
+                                j++;
+                            }
+                        });
+                    else
+                        console.log('No hits');
+                });
+            }
+        }
+        
+        let buildGallery = function() {
+        $("#images").empty();
+        //4 random images when searching for a keyword
+        buildRandomGallery();
+        let q = $("#Descimages").val();
+        let o = $("#orientation").val();
+        var API_KEY = '15519113-977e796c231895205c0fcd218';
+        var URL = "https://pixabay.com/api/?key=15519113-977e796c231895205c0fcd218&q="+q+"&image_type=photo&orientation="+o;
+        $.getJSON(URL, function(data) {
+            if (parseInt(data.totalHits) > 0)
+                $.each(data.hits, function(i, hit) {
+                    $("#images").append("Likes: " + hit.likes);
+                    $("#images").append("<div class=\"img-thumbnail flex-item\"><img src=\"" + hit.largeImageURL + "\"></div>");
+                });
+            else
+                console.log('No hits');
+        });
+    }
+    
+    let buildRandomGallery = function() {
+        let q = $("#Descimages").val();
+        let o = $("#orientation").val();
+        var API_KEY = '15519113-977e796c231895205c0fcd218';
+        var URL = "https://pixabay.com/api/?key=15519113-977e796c231895205c0fcd218&q=Random&image_type=photo";
+        let j=0;
+        $.getJSON(URL, function(data) {
+            if (parseInt(data.totalHits) > 0)
+                $.each(data.hits, function(i, hit) {
+                    if(j < 4){
+                        j++;
+                        $("#images").append("Random Image #" + j + " || Likes: " + hit.likes);
+                        $("#images").append("<div class=\"img-thumbnail flex-item\"><img src=\"" + hit.largeImageURL + "\"></div>");
+                    }
+                });
+            else
+                console.log('No hits');
+            });
+        
+        }
+        
+        
+        </script>
+    </body>
+
+</html>
