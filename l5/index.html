@@ -50,8 +50,6 @@
         
         let buildGallery = function() {
         $("#images").empty();
-        //4 random images when searching for a keyword
-        buildRandomGallery();
         let q = $("#Descimages").val();
         let o = $("#orientation").val();
         var API_KEY = '15519113-977e796c231895205c0fcd218';
@@ -65,6 +63,11 @@
             else
                 console.log('No hits');
         });
+        
+        //4 random images when searching for a keyword
+        buildRandomGallery();
+        
+        
     }
     
     let buildRandomGallery = function() {
